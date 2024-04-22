@@ -9,7 +9,6 @@ import java.util.List;
 @Accessors(chain = true)
 public class CardDto {
 
-
     private Integer id;
 
     private Boolean isActiveStatus;
@@ -19,4 +18,5 @@ public class CardDto {
     private Float totalItemsCost;
 
     private List<PurchaseLineDto> purchaseLineDto;
+
 }
