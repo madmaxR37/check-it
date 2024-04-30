@@ -7,12 +7,10 @@ public class PreOrderMapper {
 
     public static PreOrder preOrderDtoToPreOrder(PreOrderDto preOrderDto){
         return new PreOrder()
-                .setTotalCost(preOrderDto.getTotalCost())
                 .setClientName(preOrderDto.getClientName())
-                .setDeliveryCost(preOrderDto.getDeliveryCost())
                 .setClientPhoneNumber(preOrderDto.getClientPhoneNumber())
-                .setTripDistance(preOrderDto.getTripDistance())
-                ;
+                .setClientAddress(AddressMapper.addressDtoToAddress(preOrderDto.getClientAddressDto()))
+                .setCard(CardMapper.cardDtoToCard(preOrderDto.getCardDto()));
     }
 
     public static PreOrderDto preOrderToPreOrder(PreOrder preOrder){
@@ -23,7 +21,6 @@ public class PreOrderMapper {
                 .setDeliveryCost(preOrder.getDeliveryCost())
                 .setClientPhoneNumber(preOrder.getClientPhoneNumber())
                 .setTripDistance(preOrder.getTripDistance())
-                ;
+                .setCardDto(CardMapper.cardToCardDto(preOrder.getCard()));
     }
-    //TODO map the rest of the entities
 }

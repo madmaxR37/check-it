@@ -12,7 +12,7 @@ public class PreOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pre_orderId")
-    private Integer id;
+    private Long id;
 
     @Column(name = "client_name")
     private String clientName;
@@ -21,7 +21,7 @@ public class PreOrder {
     private String clientPhoneNumber;
 
     @Column(name = "distance")
-    private Long tripDistance;
+    private Float tripDistance;
 
     @Column(name = "delivery_cost")
     private Float deliveryCost;
@@ -32,6 +32,7 @@ public class PreOrder {
     @Embedded
     @Column(name = "client_localisation")
     private Address clientAddress;
+
 
     @OneToOne
     @JoinColumn(name = "card_id")

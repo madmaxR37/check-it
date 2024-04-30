@@ -3,19 +3,43 @@ package com.example.checkit.dto.mappers;
 import com.example.checkit.dto.LitigationDto;
 import com.example.checkit.model.Litigation;
 
-public class LitigationMapper {
+import java.util.ArrayList;
+import java.util.List;
 
-    public static Litigation litigationDtoToLitigation(LitigationDto litigationDto){
-        return new Litigation()
-                .setLitigationTitle(litigationDto.getLitigationTitle())
-                .setLitigationDetail(litigationDto.getLitigationDetail())
-                .setResolvedStatus(litigationDto.getResolvedStatus());
+public class LitigationMapper {
+    public static List<Litigation> litigationDtoToLitigation(List<LitigationDto> litigationDtos){
+       List<Litigation> litigationList = new ArrayList<>();
+
+       for (LitigationDto litigationDto: litigationDtos){
+           Litigation litigation = new Litigation();
+           litigation
+                   .setLitigationDetail(litigationDto.getLitigationDetail())
+                   .setLitigationTitle(litigationDto.getLitigationTitle())
+                   .setResolvedStatus(litigationDto.getResolvedStatus())
+                   .setClient(ClientMapper.clientDtoToClient(litigationDto.getClientDto()));
+           litigationList.add(litigation);
+       }
+
+
+        return litigationList;
     }
 
-    public static LitigationDto litigationToLitigationDto(Litigation litigation){
-        return new LitigationDto()
-                .setLitigationTitle(litigation.getLitigationTitle())
-                .setLitigationDetail(litigation.getLitigationDetail())
-                .setResolvedStatus(litigation.getResolvedStatus());
+    public static List<LitigationDto> litigationToLitigationDto(List<Litigation> litigations){
+
+        List<LitigationDto> litigationDtos =new ArrayList<>();
+
+        for (Litigation litigation: litigations){
+            LitigationDto litigationDto = new LitigationDto();
+            litigationDto
+                    .setId(litigation.getId())
+                    .setCreatedDate(litigation.getCreatedDate())
+                    .setLitigationTitle(litigation.getLitigationTitle())
+                    .setLitigationDetail(litigation.getLitigationDetail())
+                    .setResolvedStatus(litigation.getResolvedStatus())
+                    .setClientDto(ClientMapper.clientToClientDto(litigation.getClient()));
+            litigationDtos.add(litigationDto);
+        }
+
+        return litigationDtos;
     }
 }

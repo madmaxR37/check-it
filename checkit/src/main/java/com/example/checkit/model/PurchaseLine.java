@@ -12,11 +12,15 @@ public class PurchaseLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchaseid")
-    private Integer id;
+    private Long id;
 
     @Column(name = "purchase_qty")
     private Integer quantity;
 
     @Column(name = "price")
     private Float price;
+
+    @OneToOne
+    @JoinColumn(name = "item_id")
+    private Item item;
 }

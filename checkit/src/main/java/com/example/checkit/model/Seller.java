@@ -28,10 +28,6 @@ public class Seller extends User{
     private List<Item> items;
 
     @OneToMany
-    @JoinColumn(name = "deliveryman_id")
-    private List<DeliveryMan> deliveryMEN;
-
-    @OneToMany
     @JoinColumn(name = "orders_id")
     private List<Order> orders;
 

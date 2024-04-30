@@ -8,13 +8,15 @@ import java.util.Date;
 @Accessors(chain = true)
 public class TransactionDto {
 
-    protected Integer id;
+    protected Long id;
 
     protected Float amount;
 
     protected Date date;
 
     protected Boolean status;
+
+    private Date createdDate;
 
     protected PreOrderDto preOrderDto;
 

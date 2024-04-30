@@ -12,7 +12,7 @@ public class VehicleCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vehiclecategory_id")
-    private Integer id;
+    private Long id;
 
     private String name;
 

@@ -8,15 +8,16 @@ public class MobileMapper {
     public static Mobile mobileDtoToMobile(MobileDto mobileDto){
         return (Mobile) new Mobile()
                 .setNumber(mobileDto.getNumber())
-                .setAmount(mobileDto.getAmount())
-                .setStatus(mobileDto.getStatus());
+                .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(mobileDto.getPreOrderDto()));
     }
 
     public static MobileDto mobileToMobileDto(Mobile mobile){
         return (MobileDto) new MobileDto()
                 .setNumber(mobile.getNumber())
                 .setAmount(mobile.getAmount())
-                .setStatus(mobile.getStatus());
+                .setStatus(mobile.getStatus())
+                .setId(mobile.getId())
+                .setCreatedDate(mobile.getCreatedDate())
+                .setPreOrderDto(PreOrderMapper.preOrderToPreOrder(mobile.getPreOrder()));
     }
-    //TODO map the rest of the entities
 }

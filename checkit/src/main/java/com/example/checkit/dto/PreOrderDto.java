@@ -1,5 +1,6 @@
 package com.example.checkit.dto;
 
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -7,13 +8,13 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PreOrderDto {
 
-    private Integer id;
+    private Long id;
 
     private String clientName;
 
     private String clientPhoneNumber;
 
-    private Long tripDistance;
+    private Float tripDistance;
 
     private Float deliveryCost;
 

@@ -3,6 +3,9 @@ package com.example.checkit.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.util.Date;
 
 @Data
 @MappedSuperclass
@@ -12,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="userid")
-    protected Integer id;
+    protected Long id;
 
     @Column(name="first_name")
     protected String firstname;
@@ -26,6 +29,9 @@ public class User {
 
     protected Boolean activeStatus;
 
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    protected Date createdDate;
 
     @Embedded
     protected Address address;

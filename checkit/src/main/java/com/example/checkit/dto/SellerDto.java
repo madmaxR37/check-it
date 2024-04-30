@@ -15,8 +15,6 @@ public class SellerDto extends UserDto {
 
     private List<ItemDto> itemDtos;
 
-    private List<DeliveryManDto> deliveryMEN;
-
     private List<OrderDto> orderDtos;
 
     private List<TransactionDto> transactionDtos;

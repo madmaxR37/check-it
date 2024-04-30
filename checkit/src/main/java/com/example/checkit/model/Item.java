@@ -3,8 +3,10 @@ package com.example.checkit.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Accessors(chain = true)
 @Data
@@ -14,7 +16,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "itemid")
-    private Integer id;
+    private Long id;
 
     private String itemName;
 
@@ -23,6 +25,10 @@ public class Item {
     private Float unitPrice;
 
     private String itemDescription;
+
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
 
     @ElementCollection
     @CollectionTable(

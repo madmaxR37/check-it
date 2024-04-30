@@ -11,6 +11,8 @@ public class DeliveryManMapper {
         return (DeliveryMan) new DeliveryMan()
                 .setNicImagesUrls(deliveryManDto.getNicImagesUrls())
                 .setDrivingLicenseUrls(deliveryManDto.getDrivingLicenseUrls())
+                .setVehicle(VehicleMapper.vehicleDtoToVehicle(deliveryManDto.getVehicleDto()))
+                .setDeliveries(DeliveryMapper.deliveriesDtoToDeliveries(deliveryManDto.getDeliveries()))
                 .setFirstname(deliveryManDto.getFirstname())
                 .setSurname(deliveryManDto.getSurname())
                 .setPhoneNumber(deliveryManDto.getPhoneNumber())
@@ -23,15 +25,18 @@ public class DeliveryManMapper {
     public static DeliveryManDto deliveryManTODeliveryManDto(DeliveryMan deliveryMan){
         return (DeliveryManDto) new DeliveryManDto()
                 .setNicImagesUrls(deliveryMan.getNicImagesUrls())
+                .setVehicleDto(VehicleMapper.vehicleToVehicleDto(deliveryMan.getVehicle()))
                 .setDrivingLicenseUrls(deliveryMan.getDrivingLicenseUrls())
+                .setDeliveries(DeliveryMapper.deliveriesToDeliveriesDto(deliveryMan.getDeliveries()))
                 .setFirstname(deliveryMan.getFirstname())
                 .setSurname(deliveryMan.getSurname())
+                .setId(deliveryMan.getId())
                 .setPhoneNumber(deliveryMan.getPhoneNumber())
                 .setActiveStatus(deliveryMan.getActiveStatus())
                 .setAccountBalance(deliveryMan.getAccountBalance())
                 .setRole(deliveryMan.getRole())
                 .setProfileUrl(deliveryMan.getProfileUrl())
+                .setCreatedDate(deliveryMan.getCreatedDate())
                 ;
     }
-    //TODO map the rest of the fields
 }

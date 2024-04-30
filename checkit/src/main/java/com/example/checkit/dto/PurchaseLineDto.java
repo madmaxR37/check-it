@@ -7,9 +7,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PurchaseLineDto {
     
-    private Integer id;
+    private Long id;
     
     private Integer quantity;
     
     private Float price;
+
+    private ItemDto itemDto;
 }

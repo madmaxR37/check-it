@@ -3,6 +3,7 @@ package com.example.checkit.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
 @Accessors(chain = true)
@@ -14,13 +15,15 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transactionid")
-    protected Integer id;
+    protected Long id;
 
     @Column(name = "amount")
     protected Float amount;
 
-    @Column(name = "date")
-    protected Date date;
+    @Column(name = "createdDate")
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    protected Date createdDate;
 
     @Column(name = "status")
     protected Boolean status;
@@ -28,6 +31,9 @@ public class Transaction {
     @OneToOne
     @JoinColumn(name = "preorder_id")
     protected PreOrder preOrder;
+
+    @OneToOne(mappedBy = "transaction")
+    protected Order order;
 
 
 }

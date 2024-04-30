@@ -13,14 +13,6 @@ import java.util.List;
 @Entity
 public class Client extends User{
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    @JoinColumn(name = "litigation_id")
-    private List<Litigation> litigations;
-
-    @OneToMany
+    @OneToMany(mappedBy = "client")
     private List<Card> cards;
 }

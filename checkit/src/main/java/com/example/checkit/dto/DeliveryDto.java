@@ -3,16 +3,20 @@ package com.example.checkit.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 
 @Data
 @Accessors(chain = true)
 public class DeliveryDto {
 
-    private Integer id;
+    private Long id;
 
     private String deliveryTitle;
 
     private Float deliveryCost;
+
+    private Date createdDate;
 
     private Boolean acceptanceStatus;
 

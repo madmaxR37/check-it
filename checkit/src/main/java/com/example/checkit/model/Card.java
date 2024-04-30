@@ -14,7 +14,9 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cardid")
-    private Integer id;
+    private Long id;
+
+    private String name;
 
     private Boolean isActiveStatus;
 
@@ -25,4 +27,10 @@ public class Card {
     @OneToMany
     @JoinColumn(name = "purchaseline_id")
     private List<PurchaseLine> purchaseLine;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+
 }

@@ -9,12 +9,14 @@ import java.util.Date;
 @Accessors(chain = true)
 public class OrderDto {
 
-    private Integer id;
+    private Long id;
 
     private Boolean status;
 
-    private Date date;
+    private Date createdDate;
 
     private TransactionDto transactionDto;
+
+    private PreOrderDto preOrderDto;
 
 }

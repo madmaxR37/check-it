@@ -11,7 +11,5 @@ import java.util.List;
 @Accessors(chain = true)
 public class ClientDto extends UserDto {
 
-    private List<LitigationDto> litigationDtos;
-
     private List<CardDto> cardDtos;
 }

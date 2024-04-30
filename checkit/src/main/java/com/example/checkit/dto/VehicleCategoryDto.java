@@ -10,7 +10,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class VehicleCategoryDto {
 
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -18,7 +18,5 @@ public class VehicleCategoryDto {
 
     private String svgUrl ;
 
-    @JsonIgnore
-    private List<VehicleCategoryDto> vehicleCategoryDtos;
 
 }

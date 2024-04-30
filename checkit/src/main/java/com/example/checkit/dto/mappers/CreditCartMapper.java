@@ -9,9 +9,7 @@ public class CreditCartMapper {
         return (CreditCart) new  CreditCart()
                 .setCreditCartNumber(creditCartDto.getCreditCartNumber())
                 .setCvv(creditCartDto.getCvv())
-                .setAmount(creditCartDto.getAmount())
-                .setStatus(creditCartDto.getStatus())
-                ;
+                .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(creditCartDto.getPreOrderDto()));
     }
 
     public static CreditCartDto creditCartToCreditCartDto(CreditCart creditCart){
@@ -19,8 +17,9 @@ public class CreditCartMapper {
                 .setCreditCartNumber(creditCart.getCreditCartNumber())
                 .setCvv(creditCart.getCvv())
                 .setAmount(creditCart.getAmount())
-                .setStatus(creditCart.getStatus());
+                .setStatus(creditCart.getStatus())
+                .setId(creditCart.getId())
+                .setPreOrderDto(PreOrderMapper.preOrderToPreOrder(creditCart.getPreOrder()));
 
     }
-    //TODO map preorder
 }
