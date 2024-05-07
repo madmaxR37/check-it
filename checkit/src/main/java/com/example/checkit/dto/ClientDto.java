@@ -11,5 +11,5 @@ import java.util.List;
 @Accessors(chain = true)
 public class ClientDto extends UserDto {
 
-    private List<CardDto> cardDtos;
+    private List<CartDto> cartDtos;
 }

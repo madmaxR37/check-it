@@ -36,7 +36,7 @@ public class PreOrder {
 
     @OneToOne
     @JoinColumn(name = "card_id")
-    private Card card;
+    private Cart cart;
 
 
 }

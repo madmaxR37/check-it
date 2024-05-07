@@ -14,5 +14,5 @@ import java.util.List;
 public class Client extends User{
 
     @OneToMany(mappedBy = "client")
-    private List<Card> cards;
+    private List<Cart> carts;
 }

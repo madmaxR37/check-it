@@ -11,25 +11,25 @@ public class DeliveryMapper {
     public static Delivery deliveryDtoToDelivery(DeliveryDto deliveryDto){
         return new Delivery()
                 .setDeliveryTitle(deliveryDto.getDeliveryTitle())
-                .setDeliveryCost(deliveryDto.getDeliveryCost())
-                .setDeliveryStatus(deliveryDto.getDeliveryStatus())
-                .setAcceptanceStatus(deliveryDto.getAcceptanceStatus())
                 .setDescription(deliveryDto.getDescription())
+                .setAssignationStatus(deliveryDto.getAssignationStatus())
                 .setSellerPhoneNumber(deliveryDto.getSellerPhoneNumber())
                 .setOrder(OrderMapper.orderDtoToOrder(deliveryDto.getOrderDto()))
                 .setSellerLocation(AddressMapper.addressDtoToAddress(deliveryDto.getSellerLocation()))
                 .setDeliveryMan(DeliveryManMapper.deliveryManDtoToDeliveryMan(deliveryDto.getDeliveryManDto()))
-                .setSeller(SellerMapper.sellerDtoToSeller(deliveryDto.getSellerDto()))
-                ;
+                .setSeller(SellerMapper.sellerDtoToSeller(deliveryDto.getSellerDto()));
     }
 
     public static DeliveryDto deliveryToDeliveryDto(Delivery delivery){
 
         return new DeliveryDto()
                 .setCreatedDate(delivery.getCreatedDate())
+                .setAssignationStatus(delivery.getAssignationStatus())
+                .setPaymentStatus(delivery.getPaymentStatus())
                 .setDeliveryTitle(delivery.getDeliveryTitle())
                 .setDeliveryCost(delivery.getDeliveryCost())
                 .setId(delivery.getId())
+                .setTransactionDto(TransactionMapper.transactionToTransactionDto(delivery.getTransaction()))
                 .setDeliveryStatus(delivery.getDeliveryStatus())
                 .setAcceptanceStatus(delivery.getAcceptanceStatus())
                 .setDescription(delivery.getDescription())
@@ -45,6 +45,7 @@ public class DeliveryMapper {
         for (DeliveryDto deliveryDto: deliveryDtos){
            Delivery delivery = new Delivery()
                     .setDeliveryTitle(deliveryDto.getDeliveryTitle())
+                    .setAssignationStatus(deliveryDto.getAssignationStatus())
                     .setDeliveryCost(deliveryDto.getDeliveryCost())
                     .setDeliveryStatus(deliveryDto.getDeliveryStatus())
                     .setAcceptanceStatus(deliveryDto.getAcceptanceStatus())
@@ -66,7 +67,9 @@ public class DeliveryMapper {
         for (Delivery delivery: deliveries){
            DeliveryDto deliveryDto= new DeliveryDto()
                     .setId(delivery.getId())
+                    .setPaymentStatus(delivery.getPaymentStatus())
                     .setCreatedDate(delivery.getCreatedDate())
+                    .setAssignationStatus(delivery.getAssignationStatus())
                     .setDeliveryTitle(delivery.getDeliveryTitle())
                     .setDeliveryCost(delivery.getDeliveryCost())
                     .setDeliveryStatus(delivery.getDeliveryStatus())

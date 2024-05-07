@@ -5,7 +5,6 @@ import com.example.checkit.dto.AddressDto;
 import com.example.checkit.dto.mappers.PreOrderMapper;
 import com.example.checkit.repository.PreOrderRepository;
 import com.example.checkit.service.PreOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,22 +12,25 @@ import java.util.List;
 @Service
 public class PreOrderServiceImp  implements PreOrderService {
 
-    @Autowired
-    private PreOrderRepository preOrderRepository;
+    private final PreOrderRepository preOrderRepository;
+
+    public PreOrderServiceImp(PreOrderRepository preOrderRepository) {
+        this.preOrderRepository = preOrderRepository;
+    }
+
     @Override
     public PreOrderDto createPreOrder(PreOrderDto preOrderDto) {
         preOrderDto
-                .setTripDistance(calculateTripeDistance(preOrderDto
-                        .getClientAddressDto(),
+                .setTripDistance(calculateTripeDistance(preOrderDto.getClientAddressDto(),
                         preOrderDto
-                                .getCardDto()
+                                .getCartDto()
                                 .getPurchaseLineDto()
                                 .get(0)
                                 .getItemDto()
                                 .getSellerDto()
                                 .getAddressDto()))
                 .setDeliveryCost(calculateDeliveryCost(preOrderDto.getTripDistance()))
-                .setTotalCost(calculateTotalExpense());//TODO implement Async feature
+                .setTotalCost(calculateTotalExpense()); //TODO implement Async feature
         preOrderRepository.save(PreOrderMapper.preOrderDtoToPreOrder(preOrderDto));
         return null;
     }

@@ -9,7 +9,7 @@ public class ClientMapper {
     public static Client clientDtoToClient(ClientDto clientDto){
 
         return (Client) new Client()
-                .setCards(CardMapper.cardDtosToCards(clientDto.getCardDtos()))
+                .setCarts(CartMapper.cardDtosToCards(clientDto.getCartDtos()))
                 .setFirstname(clientDto.getFirstname())
                 .setSurname(clientDto.getSurname())
                 .setPhoneNumber(clientDto.getPhoneNumber())
@@ -24,7 +24,7 @@ public class ClientMapper {
 
     public static ClientDto clientToClientDto(Client client){
         return (ClientDto) new ClientDto()
-                .setCardDtos(CardMapper.cardsToCardDtos(client.getCards()))
+                .setCartDtos(CartMapper.cardsToCardDtos(client.getCarts()))
                 .setCreatedDate(client.getCreatedDate())
                 .setFirstname(client.getFirstname())
                 .setId(client.getId())

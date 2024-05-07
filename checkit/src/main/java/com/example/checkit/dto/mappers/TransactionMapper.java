@@ -20,7 +20,8 @@ public class TransactionMapper {
         return new Transaction()
                 .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(transactionDto.getPreOrderDto()))
                 .setStatus(transactionDto.getStatus())
-                .setCreatedDate(transactionDto.getCreatedDate());
+                .setCreatedDate(transactionDto.getCreatedDate())
+                .setDelivery(DeliveryMapper.deliveryDtoToDelivery(transactionDto.getDeliveryDto()));
     }
 
     public static List<Transaction> transactionsDtoToTransactions(List<TransactionDto> transactionDtos){

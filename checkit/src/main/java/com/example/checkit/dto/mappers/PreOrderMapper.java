@@ -10,7 +10,7 @@ public class PreOrderMapper {
                 .setClientName(preOrderDto.getClientName())
                 .setClientPhoneNumber(preOrderDto.getClientPhoneNumber())
                 .setClientAddress(AddressMapper.addressDtoToAddress(preOrderDto.getClientAddressDto()))
-                .setCard(CardMapper.cardDtoToCard(preOrderDto.getCardDto()));
+                .setCart(CartMapper.cardDtoToCard(preOrderDto.getCartDto()));
     }
 
     public static PreOrderDto preOrderToPreOrder(PreOrder preOrder){
@@ -21,6 +21,6 @@ public class PreOrderMapper {
                 .setDeliveryCost(preOrder.getDeliveryCost())
                 .setClientPhoneNumber(preOrder.getClientPhoneNumber())
                 .setTripDistance(preOrder.getTripDistance())
-                .setCardDto(CardMapper.cardToCardDto(preOrder.getCard()));
+                .setCartDto(CartMapper.cardToCardDto(preOrder.getCart()));
     }
 }

@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class CreditCartDto extends TransactionDto {
+public class CreditCardDto extends TransactionDto {
 
     private String creditCartNumber;
 

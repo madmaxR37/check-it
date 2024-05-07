@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CreditCart extends Transaction{
+public class CreditCard extends Transaction{
 
     @Column(name = "cartnumber")
     private String creditCartNumber;

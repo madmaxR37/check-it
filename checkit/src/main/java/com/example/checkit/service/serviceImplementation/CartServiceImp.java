@@ -1,17 +1,15 @@
 package com.example.checkit.service.serviceImplementation;
 
-import com.example.checkit.dto.CardDto;
-import com.example.checkit.dto.ClientDto;
+import com.example.checkit.dto.CartDto;
 import com.example.checkit.dto.PurchaseLineDto;
-import com.example.checkit.dto.mappers.CardMapper;
+import com.example.checkit.dto.mappers.CartMapper;
 import com.example.checkit.dto.mappers.PurchaseLineMapper;
-import com.example.checkit.model.Card;
+import com.example.checkit.model.Cart;
 import com.example.checkit.model.Client;
 import com.example.checkit.model.Item;
 import com.example.checkit.model.PurchaseLine;
 import com.example.checkit.repository.*;
-import com.example.checkit.service.CardService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.checkit.service.CartService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,32 +17,39 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CardServiceImp implements CardService {
-    @Autowired
-    private ItemRepository itemRepository;
+public class CartServiceImp implements CartService {
+    private final ItemRepository itemRepository;
 
-    @Autowired
-    private PurchaseLineRepository purchaseLineRepository;
+    private final PurchaseLineRepository purchaseLineRepository;
 
-    @Autowired
-    private CardRepository cardRepository;
+    private final CartRepository cartRepository;
 
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
+
+    public CartServiceImp(ItemRepository itemRepository,
+                          PurchaseLineRepository purchaseLineRepository,
+                          CartRepository cartRepository,
+                          ClientRepository clientRepository){
+        this.itemRepository=itemRepository;
+        this.purchaseLineRepository=purchaseLineRepository;
+        this.cartRepository=cartRepository;
+        this.clientRepository=clientRepository;
+    }
+
     @Override
-    public CardDto createCard(PurchaseLineDto purchaseLineDto, ClientDto clientDto) {
+    public CartDto createCard(PurchaseLineDto purchaseLineDto, Long clientId) {
         Optional<Item> item = itemRepository.findById(purchaseLineDto.getItemDto().getId());
-        Optional<Client> client = clientRepository.findById(clientDto.getId());
+        Optional<Client> client = clientRepository.findById(clientId);
         if (client.isPresent()){
             if(item.isPresent()){
                 Item itemModel = item.get();
                 if(itemModel.getQuantity()>=purchaseLineDto.getQuantity()){
                     purchaseLineRepository.save(PurchaseLineMapper.purchaseLineDtoToPurchaseLine(purchaseLineDto));
-                    Optional<Card> cardOptional = cardRepository.findByName(purchaseLineDto.getItemDto().getSellerDto().getFirstname()+'#'+purchaseLineDto.getItemDto().getSellerDto().getId()+'#'+clientDto.getId());
-                    Card card;
-                    if (cardOptional.isPresent()){
-                        card = cardOptional.get();
-                        List<PurchaseLineDto> purchaseLineDtos = PurchaseLineMapper.purchaseLineToPurchaseLineDtos(card.getPurchaseLine()) ;
+                    Optional<Cart> cartOptional = cartRepository.findByName(purchaseLineDto.getItemDto().getSellerDto().getFirstname()+'#'+purchaseLineDto.getItemDto().getSellerDto().getId()+'#'+clientId);
+                    Cart cart;
+                    if (cartOptional.isPresent()){
+                        cart = cartOptional.get();
+                        List<PurchaseLineDto> purchaseLineDtos = PurchaseLineMapper.purchaseLineToPurchaseLineDtos(cart.getPurchaseLine()) ;
                         purchaseLineDtos.add(purchaseLineDto);
                         float sum = 0;
                         int totalItems=0;
@@ -52,13 +57,14 @@ public class CardServiceImp implements CardService {
                             sum += dto.getPrice();
                             totalItems+= dto.getQuantity();
                         }
-                            card
+                            cart
                                 .setTotalItemsCost(sum)
                                 .setTotalItemsQuantity(totalItems);
-                        card.setPurchaseLine(PurchaseLineMapper.purchaseLineDtoToPurchaseLines(purchaseLineDtos));
+                        cart.setPurchaseLine(PurchaseLineMapper.purchaseLineDtoToPurchaseLines(purchaseLineDtos));
+
 
                     }else {
-                        card = new Card();
+                        cart = new Cart();
                         List<PurchaseLineDto> purchaseLineDtos = new ArrayList<>();
                         purchaseLineDtos.add(purchaseLineDto);
                         float sum = 0;
@@ -67,15 +73,15 @@ public class CardServiceImp implements CardService {
                             sum += dto.getPrice();
                             totalItems+= dto.getQuantity();
                         }
-                        card.setPurchaseLine(PurchaseLineMapper.purchaseLineDtoToPurchaseLines(purchaseLineDtos))
-                                .setName(purchaseLineDto.getItemDto().getSellerDto().getFirstname()+'#'+purchaseLineDto.getItemDto().getSellerDto().getId()+'#'+clientDto.getId())
+                        cart.setPurchaseLine(PurchaseLineMapper.purchaseLineDtoToPurchaseLines(purchaseLineDtos))
+                                .setName(purchaseLineDto.getItemDto().getSellerDto().getFirstname()+'#'+purchaseLineDto.getItemDto().getSellerDto().getId()+'#'+clientId)
                                 .setIsActiveStatus(true)
                                 .setTotalItemsCost(sum)
                                 .setTotalItemsQuantity(totalItems);
 
                     }
-                    cardRepository.save(card);
-                    return CardMapper.cardToCardDto(card);
+                    cartRepository.save(cart);
+                    return CartMapper.cardToCardDto(cart);
                 }
             }
 
@@ -85,23 +91,23 @@ public class CardServiceImp implements CardService {
     }
 
     @Override
-    public CardDto updateCard(CardDto cardDto) {
-        Optional<Card> cardOptional = cardRepository.findByName(cardDto.getName());
-        Card card;
+    public CartDto updateCard(CartDto cartDto) {
+        Optional<Cart> cardOptional = cartRepository.findByName(cartDto.getName());
+        Cart cart;
         if (cardOptional.isPresent()){
-            card = CardMapper.cardDtoToCard(cardDto);
-            List<PurchaseLine> purchaseLines= card.getPurchaseLine();
+            cart = CartMapper.cardDtoToCard(cartDto);
+            List<PurchaseLine> purchaseLines= cart.getPurchaseLine();
             float sum =0;
             int totalItems=0;
             for(PurchaseLine purchaseLine: purchaseLines){
                 sum+=purchaseLine.getPrice();
                 totalItems+=purchaseLine.getQuantity();
             }
-                card
+                cart
                     .setTotalItemsCost(sum)
                     .setTotalItemsQuantity(totalItems);
-            cardRepository.save(card);
-            return CardMapper.cardToCardDto(card);
+            cartRepository.save(cart);
+            return CartMapper.cardToCardDto(cart);
         }
         return null;
     }

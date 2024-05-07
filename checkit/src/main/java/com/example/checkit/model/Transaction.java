@@ -35,5 +35,8 @@ public class Transaction {
     @OneToOne(mappedBy = "transaction")
     protected Order order;
 
+    @OneToOne
+    protected Delivery delivery;
+
 
 }

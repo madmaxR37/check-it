@@ -4,11 +4,12 @@ import com.example.checkit.dto.OrderDto;
 import com.example.checkit.dto.TransactionDto;
 import com.example.checkit.dto.mappers.OrderMapper;
 import com.example.checkit.model.Order;
+import com.example.checkit.model.Seller;
 import com.example.checkit.model.Transaction;
 import com.example.checkit.repository.OrderRepository;
+import com.example.checkit.repository.SellerRepository;
 import com.example.checkit.repository.TransactionRepository;
 import com.example.checkit.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,17 @@ import java.util.Optional;
 @Service
 public class OrderServiceImp implements OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final SellerRepository sellerRepository;
+
+    private final TransactionRepository transactionRepository;
+
+    public OrderServiceImp(OrderRepository orderRepository, SellerRepository sellerRepository, TransactionRepository transactionRepository) {
+        this.orderRepository = orderRepository;
+        this.sellerRepository = sellerRepository;
+        this.transactionRepository = transactionRepository;
+    }
 
     @Override
     public OrderDto createOrder(TransactionDto transactionDto) {
@@ -28,10 +35,15 @@ public class OrderServiceImp implements OrderService {
         if (transaction.isPresent()){
             Transaction transactionModel= transaction.get();
             if (transactionModel.getStatus()){
-                Order order = new Order()
-                        .setPreOrder(transactionModel.getPreOrder());
-                orderRepository.save(order);
-                return OrderMapper.orderToOrderDto(order);
+                Optional<Seller> seller=sellerRepository.findById(transactionDto.getPreOrderDto().getCartDto().getPurchaseLineDto().get(0).getItemDto().getSellerId());
+                if (seller.isPresent()){
+                    Seller sellerModel = seller.get();
+                    sellerModel.setAccountBalance(sellerModel.getAccountBalance()+transactionDto.getAmount());
+                    sellerRepository.save(sellerModel);
+                    Order order = new Order().setPreOrder(transactionModel.getPreOrder());
+                    orderRepository.save(order);
+                    return OrderMapper.orderToOrderDto(order);
+                }
             }
         }
 

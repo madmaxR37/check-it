@@ -22,7 +22,7 @@ public class PreOrderDto {
 
     private AddressDto clientAddressDto;
 
-    private CardDto cardDto;
+    private CartDto cartDto;
 
 
 }

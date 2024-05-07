@@ -28,6 +28,8 @@ public class ItemDto {
 
     private SellerDto sellerDto;
 
+    private Long sellerId;
+
     private List<CategoryDto> categories;
 
 

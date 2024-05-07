@@ -4,7 +4,6 @@ import com.example.checkit.dto.mappers.ClientMapper;
 import com.example.checkit.model.Client;
 import com.example.checkit.repository.*;
 import com.example.checkit.service.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +12,12 @@ import java.util.Optional;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    @Autowired
-    private ClientRepository clientRepository;
+
+    private final ClientRepository clientRepository;
+
+    public ClientServiceImpl(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     @Override
     public ClientDto create(ClientDto clientDto) {

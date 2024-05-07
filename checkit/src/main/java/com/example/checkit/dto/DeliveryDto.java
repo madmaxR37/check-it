@@ -20,6 +20,10 @@ public class DeliveryDto {
 
     private Boolean acceptanceStatus;
 
+    private Boolean paymentStatus;
+
+    private Boolean assignationStatus;
+
     private String description;
 
     private String sellerPhoneNumber;
@@ -33,4 +37,6 @@ public class DeliveryDto {
     private DeliveryManDto deliveryManDto;
 
     private SellerDto sellerDto;
+
+    private  TransactionDto transactionDto;
 }

@@ -20,5 +20,7 @@ public class TransactionDto {
 
     protected PreOrderDto preOrderDto;
 
+    protected DeliveryDto deliveryDto;
+
 
 }

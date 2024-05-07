@@ -1,6 +1,7 @@
 package com.example.checkit.service;
 
 import com.example.checkit.dto.DeliveryManDto;
+import com.example.checkit.dto.VehicleDto;
 
 import java.util.List;
 

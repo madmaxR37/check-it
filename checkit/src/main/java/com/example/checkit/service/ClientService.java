@@ -1,9 +1,6 @@
 package com.example.checkit.service;
 
-import com.example.checkit.dto.CardDto;
 import com.example.checkit.dto.ClientDto;
-import com.example.checkit.dto.LitigationDto;
-import com.example.checkit.dto.TransactionDto;
 
 import java.util.List;
 

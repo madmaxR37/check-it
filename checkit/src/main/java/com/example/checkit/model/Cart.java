@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Entity
 @Accessors(chain = true)
-public class Card {
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

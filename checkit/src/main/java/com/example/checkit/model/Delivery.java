@@ -26,6 +26,11 @@ public class Delivery {
     @Column(name = "acceptanceStatus")
     private Boolean acceptanceStatus;
 
+
+    private Boolean paymentStatus;
+
+    private Boolean assignationStatus;
+
     private String description;
 
     private String sellerPhoneNumber;
@@ -50,4 +55,8 @@ public class Delivery {
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Seller seller;
+
+    @OneToOne(mappedBy = "delivery")
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
 }

@@ -8,7 +8,18 @@ import java.util.List;
 
 public class CategoryMapper {
 
-    public static List<Category> categoryDtoTOCategory(List<CategoryDto> categoryDtos){
+    public static  Category categoryDtoToCategory(CategoryDto categoryDto){
+        return new Category().setName(categoryDto.getName())
+                             .setIsActive(categoryDto.getIsActive());
+
+    }
+
+    public static CategoryDto categoryToCategoryDto(Category category){
+        return new CategoryDto()
+                .setName(category.getName())
+                .setIsActive(category.getIsActive());
+    }
+    public static List<Category> categoryDtosTOCategories(List<CategoryDto> categoryDtos){
 
         List<Category> categories = new ArrayList<>();
         for (CategoryDto categoryDto: categoryDtos){
@@ -23,7 +34,7 @@ public class CategoryMapper {
         return categories;
     }
 
-    public static List<CategoryDto> categorytoCategoryDto(List<Category> categories){
+    public static List<CategoryDto> categoriestoCategoryDtos(List<Category> categories){
 
         List<CategoryDto> categoryDtos = new ArrayList<>();
 
@@ -39,4 +50,5 @@ public class CategoryMapper {
 
         return categoryDtos;
     }
+
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
-public class CardDto {
+public class CartDto {
 
     private Long id;
 

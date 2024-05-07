@@ -32,14 +32,16 @@ public class ItemMapper {
          for (Item item: items){
              ItemDto itemDto = new ItemDto()
                      .setId(item.getId())
+                     .setSellerId(item.getSeller().getId())
                      .setItemName(item.getItemName())
                      .setItemDescription(item.getItemDescription())
+                     .setSellerDto(SellerMapper.sellerToSellerDto(item.getSeller()))
                      .setQuantity(item.getQuantity())
                      .setUnitPrice(item.getUnitPrice())
                      .setAvailableStatus(item.getAvailableStatus())
                      .setItemImages(item.getItemImages())
                      .setCreatedDate(item.getCreatedDate())
-                     .setCategories(CategoryMapper.categorytoCategoryDto(item.getCategories()));
+                     .setCategories(CategoryMapper.categoriestoCategoryDtos(item.getCategories()));
              itemDtos.add(itemDto);
          }
         return itemDtos;
@@ -56,14 +58,16 @@ public class ItemMapper {
     public static ItemDto itemToItemDto(Item item){
         return new ItemDto()
                 .setId(item.getId())
+                .setSellerId(item.getSeller().getId())
                 .setItemName(item.getItemName())
+                .setSellerDto(SellerMapper.sellerToSellerDto(item.getSeller()))
                 .setItemDescription(item.getItemDescription())
                 .setQuantity(item.getQuantity())
                 .setUnitPrice(item.getUnitPrice())
                 .setAvailableStatus(item.getAvailableStatus())
                 .setItemImages(item.getItemImages())
                 .setCreatedDate(item.getCreatedDate())
-                .setCategories(CategoryMapper.categorytoCategoryDto(item.getCategories()));
+                .setCategories(CategoryMapper.categoriestoCategoryDtos(item.getCategories()));
 
     }
 }
