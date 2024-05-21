@@ -1,9 +1,13 @@
 package com.example.checkit.service.serviceImplementation;
 import com.example.checkit.dto.ClientDto;
+import com.example.checkit.dto.UserLoginDto;
 import com.example.checkit.dto.mappers.ClientMapper;
 import com.example.checkit.model.Client;
 import com.example.checkit.repository.*;
 import com.example.checkit.service.ClientService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +19,12 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
 
+
     public ClientServiceImpl(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
-    @Override
-    public ClientDto create(ClientDto clientDto) {
-        Client client = ClientMapper.clientDtoToClient(clientDto);
-        return ClientMapper.clientToClientDto(clientRepository.save(client));
-    }
+
 
     @Override
     public ClientDto update(ClientDto clientDto) {
@@ -35,6 +36,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDto findClientByEmail(String email) {
+        Optional<Client> client = clientRepository.findClientByEmail(email);
+        if (client.isPresent()){
+            Client clientModel = client.get();
+
+            return ClientMapper.clientToClientDto(clientModel);
+        }
         return null;
     }
 

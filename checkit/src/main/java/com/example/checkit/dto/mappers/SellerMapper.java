@@ -31,6 +31,7 @@ public class SellerMapper {
                 .setDeliveries(DeliveryMapper.deliveriesToDeliveriesDto(seller.getDeliveries()))
                 .setFirstname(seller.getFirstname())
                 .setSurname(seller.getSurname())
+                .setPassword(seller.getPassword())
                 .setPhoneNumber(seller.getPhoneNumber())
                 .setActiveStatus(seller.getActiveStatus())
                 .setAccountBalance(seller.getAccountBalance())

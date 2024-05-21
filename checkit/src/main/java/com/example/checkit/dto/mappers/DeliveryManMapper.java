@@ -31,6 +31,7 @@ public class DeliveryManMapper {
                 .setFirstname(deliveryMan.getFirstname())
                 .setSurname(deliveryMan.getSurname())
                 .setId(deliveryMan.getId())
+                .setPassword(deliveryMan.getPassword())
                 .setPhoneNumber(deliveryMan.getPhoneNumber())
                 .setActiveStatus(deliveryMan.getActiveStatus())
                 .setAccountBalance(deliveryMan.getAccountBalance())
