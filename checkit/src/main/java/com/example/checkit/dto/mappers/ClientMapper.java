@@ -12,11 +12,13 @@ public class ClientMapper {
                 .setFirstname(clientDto.getFirstname())
                 .setSurname(clientDto.getSurname())
                 .setPhoneNumber(clientDto.getPhoneNumber())
-                .setActiveStatus(clientDto.getActiveStatus())
-                .setProfileUrl(clientDto.getProfileUrl())
                 .setEmail(clientDto.getEmail())
                 .setPassword(clientDto.getPassword())
-                //.setAddress(AddressMapper.addressDtoToAddress(clientDto.getAddressDto()))
+                .setActiveStatus(clientDto.getActiveStatus())
+                .setAccountBalance(clientDto.getAccountBalance())
+                .setRole(clientDto.getRole())
+                .setProfileUrl(clientDto.getProfileUrl())
+                .setAddress(AddressMapper.addressDtoToAddress(clientDto.getAddressDto()))
                 ;
 
     }
@@ -26,15 +28,15 @@ public class ClientMapper {
                 //.setCartDtos(CartMapper.cardsToCardDtos(client.getCarts()))
                 .setCreatedDate(client.getCreatedDate())
                 .setFirstname(client.getFirstname())
-                .setPassword(client.getPassword())
                 .setId(client.getId())
+                .setEmail(client.getEmail())
                 .setSurname(client.getSurname())
                 .setPhoneNumber(client.getPhoneNumber())
                 .setActiveStatus(client.getActiveStatus())
                 .setAccountBalance(client.getAccountBalance())
                 .setRole(client.getRole())
                 .setProfileUrl(client.getProfileUrl())
-                //.setAddressDto(AddressMapper.addressToAddressDto(client.getAddress()))
+                .setAddressDto(AddressMapper.addressToAddressDto(client.getAddress()))
                 ;
     }
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 public class TransactionServiceImp implements TransactionService {
     private final TransactionRepository transactionRepository;
 
-    private final SellerRepository sellerRepository;
+    private final UserRepository userRepository;
 
     private final CreditCardRepository cardRepository;
 
@@ -26,22 +26,19 @@ public class TransactionServiceImp implements TransactionService {
 
     private final PreOrderRepository preOrderRepository;
 
-    private final ItemRepository itemRepository;
 
     public TransactionServiceImp(TransactionRepository transactionRepository,
-                                 SellerRepository sellerRepository,
+                                 UserRepository userRepository,
                                  CreditCardRepository cardRepository,
                                  DeliveryRepository deliveryRepository,
                                  MobileRepository mobileRepository,
-                                 PreOrderRepository preOrderRepository,
-                                 ItemRepository itemRepository) {
+                                 PreOrderRepository preOrderRepository) {
         this.transactionRepository = transactionRepository;
-        this.sellerRepository = sellerRepository;
+        this.userRepository = userRepository;
         this.cardRepository = cardRepository;
         this.deliveryRepository = deliveryRepository;
         this.mobileRepository = mobileRepository;
         this.preOrderRepository = preOrderRepository;
-        this.itemRepository = itemRepository;
     }
 
     @Override
@@ -76,13 +73,13 @@ public class TransactionServiceImp implements TransactionService {
     @Override
     public TransactionDto createDeliveryTransaction(DeliveryDto deliveryDto) {
         Optional<Delivery> delivery = deliveryRepository.findById(deliveryDto.getId());
-        Optional<Seller> seller = sellerRepository.findById(deliveryDto.getSellerDto().getId());
+        Optional<User> seller = userRepository.findById(deliveryDto.getSellerDto().getId());
         if (delivery.isPresent() && seller.isPresent()){
-            Seller sellerModel=seller.get();
+            User sellerModel=seller.get();
             Delivery deliveryModel = delivery.get();
             if (deliveryModel.getDeliveryCost()<= sellerModel.getAccountBalance()){
                 sellerModel.setAccountBalance(sellerModel.getAccountBalance()-deliveryModel.getDeliveryCost());
-                sellerRepository.save(sellerModel);
+                userRepository.save(sellerModel);
                 deliveryModel.setPaymentStatus(true);
                 deliveryRepository.save(deliveryModel);
                 Transaction transaction = new Transaction();

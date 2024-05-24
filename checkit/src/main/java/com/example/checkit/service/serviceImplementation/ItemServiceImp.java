@@ -6,8 +6,9 @@ import com.example.checkit.dto.mappers.CategoryMapper;
 import com.example.checkit.dto.mappers.ItemMapper;
 import com.example.checkit.model.Item;
 import com.example.checkit.model.Seller;
+import com.example.checkit.model.User;
 import com.example.checkit.repository.ItemRepository;
-import com.example.checkit.repository.SellerRepository;
+import com.example.checkit.repository.UserRepository;
 import com.example.checkit.service.ItemService;
 import org.springframework.stereotype.Service;
 
@@ -19,20 +20,21 @@ public class ItemServiceImp implements ItemService {
 
     private final ItemRepository itemRepository;
 
-    private final SellerRepository sellerRepository;
+    private final UserRepository userRepository;
 
-    public ItemServiceImp(ItemRepository itemRepository, SellerRepository sellerRepository) {
+
+    public ItemServiceImp(ItemRepository itemRepository, UserRepository userRepository) {
         this.itemRepository = itemRepository;
-        this.sellerRepository = sellerRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public ItemDto createItem(ItemDto itemDto, Long sellerId, List<CategoryDto> categoryDtos) {
-        Optional<Seller> seller= sellerRepository.findById(sellerId);
-        if (seller.isPresent()){
+        Optional<User> user= userRepository.findById(sellerId);
+        if (user.isPresent()){
             Item item =
                     ItemMapper.itemDtoToItem(itemDto)
-                            .setSeller(seller.get())
+                            .setSeller((Seller) user.get())
                             .setCategories(CategoryMapper.categoryDtosTOCategories(categoryDtos));
             itemRepository.save(item);
         }

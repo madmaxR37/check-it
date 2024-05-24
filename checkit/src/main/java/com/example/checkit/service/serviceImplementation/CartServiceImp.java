@@ -4,10 +4,7 @@ import com.example.checkit.dto.CartDto;
 import com.example.checkit.dto.PurchaseLineDto;
 import com.example.checkit.dto.mappers.CartMapper;
 import com.example.checkit.dto.mappers.PurchaseLineMapper;
-import com.example.checkit.model.Cart;
-import com.example.checkit.model.Client;
-import com.example.checkit.model.Item;
-import com.example.checkit.model.PurchaseLine;
+import com.example.checkit.model.*;
 import com.example.checkit.repository.*;
 import com.example.checkit.service.CartService;
 import org.springframework.stereotype.Service;
@@ -24,23 +21,24 @@ public class CartServiceImp implements CartService {
 
     private final CartRepository cartRepository;
 
-    private final ClientRepository clientRepository;
+
+    private final UserRepository userRepository;
 
     public CartServiceImp(ItemRepository itemRepository,
                           PurchaseLineRepository purchaseLineRepository,
                           CartRepository cartRepository,
-                          ClientRepository clientRepository){
+                          UserRepository userRepository){
         this.itemRepository=itemRepository;
         this.purchaseLineRepository=purchaseLineRepository;
         this.cartRepository=cartRepository;
-        this.clientRepository=clientRepository;
+        this.userRepository=userRepository;
     }
 
     @Override
     public CartDto createCard(PurchaseLineDto purchaseLineDto, Long clientId) {
         Optional<Item> item = itemRepository.findById(purchaseLineDto.getItemDto().getId());
-        Optional<Client> client = clientRepository.findById(clientId);
-        if (client.isPresent()){
+        Optional<User> user = userRepository.findById(clientId);
+        if (user.isPresent()){
             if(item.isPresent()){
                 Item itemModel = item.get();
                 if(itemModel.getQuantity()>=purchaseLineDto.getQuantity()){

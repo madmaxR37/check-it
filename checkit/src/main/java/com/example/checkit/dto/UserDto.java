@@ -15,11 +15,11 @@ public class UserDto {
 
     protected String surname;
 
+    protected String phoneNumber;
+
     protected String email;
 
     protected String password;
-
-    protected String phoneNumber;
 
     protected Boolean activeStatus;
 

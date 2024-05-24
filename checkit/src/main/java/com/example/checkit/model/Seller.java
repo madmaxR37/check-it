@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 @Accessors(chain = true)
+@DiscriminatorValue("seller")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

@@ -3,9 +3,9 @@ package com.example.checkit.service.serviceImplementation;
 import com.example.checkit.dto.AddressDto;
 import com.example.checkit.dto.DeliveryDto;
 import com.example.checkit.dto.mappers.DeliveryMapper;
-import com.example.checkit.model.Seller;
+import com.example.checkit.model.User;
 import com.example.checkit.repository.DeliveryRepository;
-import com.example.checkit.repository.SellerRepository;
+import com.example.checkit.repository.UserRepository;
 import com.example.checkit.service.DeliveryService;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +18,19 @@ public class DeliveryServiceImp implements DeliveryService {
 
     private final DeliveryRepository deliveryRepository;
 
-    private final SellerRepository sellerRepository;
+    private final UserRepository userRepository;
 
-    public DeliveryServiceImp(DeliveryRepository deliveryRepository, SellerRepository sellerRepository) {
+    public DeliveryServiceImp(DeliveryRepository deliveryRepository,
+                              UserRepository userRepository) {
         this.deliveryRepository = deliveryRepository;
-        this.sellerRepository = sellerRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public DeliveryDto createDelivery(DeliveryDto dto) {
 
-        Optional<Seller> seller = sellerRepository.findById(dto.getSellerDto().getId());
-        if (seller.isPresent()){
+        Optional<User> user = userRepository.findById(dto.getSellerDto().getId());
+        if (user.isPresent()){
             dto.setDeliveryCost(calculateDeliveryCost
                     (calculateTripeDistance
                             (dto.getOrderDto()

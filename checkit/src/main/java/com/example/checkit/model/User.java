@@ -1,21 +1,18 @@
 package com.example.checkit.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.Date;
 
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
-@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Accessors(chain = true)
-public class User implements UserDetails {
+@DiscriminatorColumn(name = "user_type",discriminatorType = DiscriminatorType.STRING)
+@Entity
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +25,13 @@ public class User implements UserDetails {
     @Column(name="surname")
     protected String surname;
 
-    @Column(name="email")
-    protected String email;
-
     @Column(name="phoneNumber")
     protected String phoneNumber;
 
-    protected String password;
+    protected String email;
+
+    protected  String password;
+
 
     protected Boolean activeStatus;
 
@@ -54,33 +51,5 @@ public class User implements UserDetails {
     @Column(name="profilURL")
     protected String profileUrl;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }
