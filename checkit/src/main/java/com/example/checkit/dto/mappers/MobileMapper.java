@@ -6,9 +6,8 @@ import com.example.checkit.model.Mobile;
 public class MobileMapper {
 
     public static Mobile mobileDtoToMobile(MobileDto mobileDto){
-        return (Mobile) new Mobile()
-                .setNumber(mobileDto.getNumber())
-                .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(mobileDto.getPreOrderDto()));
+        return  new Mobile()
+                .setNumber(mobileDto.getNumber());
     }
 
     public static MobileDto mobileToMobileDto(Mobile mobile){

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ItemService {
 
-    ItemDto createItem(ItemDto itemDto, Long sellerId, List<CategoryDto> categoryDtos);
+    ItemDto createItem(ItemDto itemDto, Long sellerId, List<Long> categoryIds);
 
     ItemDto updateItem(ItemDto itemDto);
 

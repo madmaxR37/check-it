@@ -13,4 +13,6 @@ public class CreditCardDto extends TransactionDto {
     private String creditCartNumber;
 
     private String cvv;
+
+    private String date;
 }

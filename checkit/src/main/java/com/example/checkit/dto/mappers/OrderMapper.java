@@ -11,7 +11,6 @@ public class OrderMapper {
     public static Order orderDtoToOrder(OrderDto orderDto){
         return new Order()
                 .setStatus(orderDto.getStatus())
-                .setTransaction(TransactionMapper.transactionDtoToTransaction(orderDto.getTransactionDto()))
                 .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(orderDto.getPreOrderDto()));
     }
 
@@ -31,7 +30,6 @@ public class OrderMapper {
         for (OrderDto orderDto: orderDtos){
             Order order = new Order()
                     .setStatus(orderDto.getStatus())
-                    .setTransaction(TransactionMapper.transactionDtoToTransaction(orderDto.getTransactionDto()))
                     .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(orderDto.getPreOrderDto()));
             orders.add(order);
         }

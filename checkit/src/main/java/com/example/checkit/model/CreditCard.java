@@ -17,4 +17,6 @@ public class CreditCard extends Transaction{
 
     @Column(name = "cvv")
     private String cvv;
+
+    private String expDate;
 }

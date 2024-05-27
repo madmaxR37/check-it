@@ -16,11 +16,7 @@ public class DeliveryManMapper {
                 .setFirstname(deliveryManDto.getFirstname())
                 .setSurname(deliveryManDto.getSurname())
                 .setEmail(deliveryManDto.getEmail())
-                .setPassword(deliveryManDto.getPassword())
                 .setPhoneNumber(deliveryManDto.getPhoneNumber())
-                .setActiveStatus(deliveryManDto.getActiveStatus())
-                .setAccountBalance(deliveryManDto.getAccountBalance())
-                .setRole(deliveryManDto.getRole())
                 .setProfileUrl(deliveryManDto.getProfileUrl());
     }
 
@@ -29,7 +25,6 @@ public class DeliveryManMapper {
                 .setNicImagesUrls(deliveryMan.getNicImagesUrls())
                 .setVehicleDto(VehicleMapper.vehicleToVehicleDto(deliveryMan.getVehicle()))
                 .setDrivingLicenseUrls(deliveryMan.getDrivingLicenseUrls())
-                .setDeliveries(DeliveryMapper.deliveriesToDeliveriesDto(deliveryMan.getDeliveries()))
                 .setFirstname(deliveryMan.getFirstname())
                 .setSurname(deliveryMan.getSurname())
                 .setEmail(deliveryMan.getEmail())

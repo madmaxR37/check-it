@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PreOrderService {
 
-    PreOrderDto createPreOrder(PreOrderDto preOrderDto);
+    PreOrderDto createPreOrder(PreOrderDto preOrderDto,Long cartId);
 
     PreOrderDto findOrderById(Long id);
 

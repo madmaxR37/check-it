@@ -6,10 +6,9 @@ import com.example.checkit.model.CreditCard;
 public class CreditCardMapper {
 
     public static CreditCard creditCartDtoToCreditCart(CreditCardDto creditCardDto){
-        return (CreditCard) new CreditCard()
+        return new CreditCard()
                 .setCreditCartNumber(creditCardDto.getCreditCartNumber())
-                .setCvv(creditCardDto.getCvv())
-                .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(creditCardDto.getPreOrderDto()));
+                .setCvv(creditCardDto.getCvv());
     }
 
     public static CreditCardDto creditCartToCreditCartDto(CreditCard creditCard){

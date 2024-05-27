@@ -15,28 +15,6 @@ public class TransactionMapper {
                 .setStatus(transaction.getStatus())
                 .setPreOrderDto(PreOrderMapper.preOrderToPreOrder(transaction.getPreOrder()));
     }
-
-    public static Transaction transactionDtoToTransaction(TransactionDto transactionDto){
-        return new Transaction()
-                .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(transactionDto.getPreOrderDto()))
-                .setStatus(transactionDto.getStatus())
-                .setCreatedDate(transactionDto.getCreatedDate())
-                .setDelivery(DeliveryMapper.deliveryDtoToDelivery(transactionDto.getDeliveryDto()));
-    }
-
-    public static List<Transaction> transactionsDtoToTransactions(List<TransactionDto> transactionDtos){
-        List<Transaction> transactions = new ArrayList<>();
-
-        for(TransactionDto transactionDto: transactionDtos){
-            Transaction transaction = new Transaction()
-                    .setPreOrder(PreOrderMapper.preOrderDtoToPreOrder(transactionDto.getPreOrderDto()))
-                    .setStatus(transactionDto.getStatus())
-                    .setCreatedDate(transactionDto.getCreatedDate());
-            transactions.add(transaction);
-        }
-        return transactions;
-    }
-
     public static List<TransactionDto> transactionsToTransactionsDto(List<Transaction> transactions){
         List<TransactionDto> transactionsDto = new ArrayList<>();
 

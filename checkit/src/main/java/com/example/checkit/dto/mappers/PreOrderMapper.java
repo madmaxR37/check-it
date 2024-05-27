@@ -9,8 +9,7 @@ public class PreOrderMapper {
         return new PreOrder()
                 .setClientName(preOrderDto.getClientName())
                 .setClientPhoneNumber(preOrderDto.getClientPhoneNumber())
-                .setClientAddress(AddressMapper.addressDtoToAddress(preOrderDto.getClientAddressDto()))
-                .setCart(CartMapper.cardDtoToCard(preOrderDto.getCartDto()));
+                .setClientAddress(AddressMapper.addressDtoToAddress(preOrderDto.getClientAddressDto()));
     }
 
     public static PreOrderDto preOrderToPreOrder(PreOrder preOrder){

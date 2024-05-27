@@ -1,16 +1,16 @@
 package com.example.checkit.service.serviceImplementation;
 
-import com.example.checkit.dto.*;
-import com.example.checkit.dto.mappers.CreditCardMapper;
-import com.example.checkit.dto.mappers.MobileMapper;
+import com.example.checkit.dto.CreditCardDto;
+import com.example.checkit.dto.MobileDto;
+import com.example.checkit.dto.TransactionDto;
 import com.example.checkit.dto.mappers.TransactionMapper;
 import com.example.checkit.model.*;
 import com.example.checkit.repository.*;
 import com.example.checkit.service.TransactionService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class TransactionServiceImp implements TransactionService {
@@ -18,93 +18,104 @@ public class TransactionServiceImp implements TransactionService {
 
     private final UserRepository userRepository;
 
-    private final CreditCardRepository cardRepository;
-
     private final DeliveryRepository deliveryRepository;
-
-    private final MobileRepository mobileRepository;
 
     private final PreOrderRepository preOrderRepository;
 
 
     public TransactionServiceImp(TransactionRepository transactionRepository,
                                  UserRepository userRepository,
-                                 CreditCardRepository cardRepository,
                                  DeliveryRepository deliveryRepository,
-                                 MobileRepository mobileRepository,
                                  PreOrderRepository preOrderRepository) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
-        this.cardRepository = cardRepository;
         this.deliveryRepository = deliveryRepository;
-        this.mobileRepository = mobileRepository;
         this.preOrderRepository = preOrderRepository;
     }
 
-    @Override
-    public TransactionDto createOrderMobileTransaction(MobileDto mobileDto) {
-        Optional<PreOrder> preOrder = preOrderRepository.findById(mobileDto.getPreOrderDto().getId());
-        if(preOrder.isPresent()){
-            PreOrder preOrderModel = preOrder.get();
-            mobileDto.setAmount(preOrderModel.getTotalCost())
-                     .setStatus(setTransactionStatus(preOrderModel.getTotalCost()));
-            mobileRepository.save(MobileMapper.mobileDtoToMobile(mobileDto));
-            return mobileDto;
-        }
-        return null;
-    }
 
     @Override
-    public TransactionDto createOrderCreditCardTransaction(CreditCardDto creditCardDto) {
-        Optional<PreOrder> preOrder = preOrderRepository.findById(creditCardDto.getPreOrderDto().getId());
-        if(preOrder.isPresent()){
-            PreOrder preOrderModel = preOrder.get();
-            creditCardDto
-                    .setAmount(preOrderModel.getTotalCost())
-                    .setStatus(setTransactionStatus(preOrderModel.getTotalCost()));
+    public Object preOrderTransaction(Object transactionDto, Long preOrderId) {
+
+        Optional<PreOrder> preOrder = preOrderRepository.findById(preOrderId);
+        if (preOrder.isPresent()){
+
+            Optional<User> clientOptional = userRepository.findById(preOrder.get().getCart().getClient().getId());
+            Optional<User> sellerOptional = userRepository.findById(preOrder.get().getCart().getPurchaseLine().get(0).getItem().getSeller().getId());
+            if (sellerOptional.isPresent()){
+           if (clientOptional.isPresent()){
+               User seller = sellerOptional.get();
+               User client = clientOptional.get();
+            if (transactionDto instanceof TransactionDto){
+                Transaction transaction = new Transaction()
+                        .setPreOrder(preOrder.get())
+                        .setAmount(preOrder.get().getTotalCost());
+                 if (accountBalanceCheck(client.getAccountBalance(),preOrder.get().getTotalCost())){
+                    client.setAccountBalance(debitAccount(client.getAccountBalance(),preOrder.get().getTotalCost()));
+                    seller.setAccountBalance(creditAccount(seller.getAccountBalance(),preOrder.get().getTotalCost()));
+                    transaction.setStatus(true);
+                 userRepository.save(seller);
+                 userRepository.save(client);
+                 return TransactionMapper.transactionToTransactionDto(transactionRepository.save(transaction));
+                 }
+            }
+            if (transactionDto instanceof MobileDto){
+                Mobile transaction = (Mobile) new Mobile()
+                        .setPreOrder(preOrder.get())
+                        .setAmount(preOrder.get().getTotalCost());
+                if (validateMobileTransaction(((MobileDto) transactionDto).getNumber(),
+                        preOrder.get().getTotalCost())){
+                    seller.setAccountBalance(creditAccount(seller.getAccountBalance(),
+                            ((MobileDto) transactionDto).getAmount()));
+                    transaction.setStatus(true);
+                    userRepository.save(seller);
+                    return TransactionMapper.transactionToTransactionDto(transactionRepository.save(transaction));
+                }
+
+            }
+            if (transactionDto instanceof CreditCardDto){
+                CreditCard transaction = (CreditCard) new CreditCard()
+                        .setPreOrder(preOrder.get())
+                        .setAmount(preOrder.get().getTotalCost());
+                if (validateCardTransaction(((CreditCardDto) transactionDto).getCreditCartNumber(),
+                        ((CreditCardDto) transactionDto).getCvv(),
+                        ((CreditCardDto) transactionDto).getDate(),
+                        preOrder.get().getTotalCost())){
+                    seller.setAccountBalance(creditAccount(seller.getAccountBalance(),
+                            ((CreditCardDto) transactionDto).getAmount()));
+                    transaction.setStatus(true);
+                    userRepository.save(seller);
+                    return TransactionMapper.transactionToTransactionDto(transactionRepository.save(transaction));
+                }
+
+            }
+           }
 
             }
 
-            cardRepository.save(CreditCardMapper.creditCartDtoToCreditCart(creditCardDto));
-            return creditCardDto;
+
         }
 
-
-    @Override
-    public TransactionDto createDeliveryTransaction(DeliveryDto deliveryDto) {
-        Optional<Delivery> delivery = deliveryRepository.findById(deliveryDto.getId());
-        Optional<User> seller = userRepository.findById(deliveryDto.getSellerDto().getId());
-        if (delivery.isPresent() && seller.isPresent()){
-            User sellerModel=seller.get();
-            Delivery deliveryModel = delivery.get();
-            if (deliveryModel.getDeliveryCost()<= sellerModel.getAccountBalance()){
-                sellerModel.setAccountBalance(sellerModel.getAccountBalance()-deliveryModel.getDeliveryCost());
-                userRepository.save(sellerModel);
-                deliveryModel.setPaymentStatus(true);
-                deliveryRepository.save(deliveryModel);
-                Transaction transaction = new Transaction();
-                transaction.setDelivery(deliveryModel)
-                        .setAmount(deliveryModel.getDeliveryCost())
-                        .setStatus(true);
-                transactionRepository.save(transaction);
-                return TransactionMapper.transactionToTransactionDto(transaction);
-
-            }
-        }
         return null;
     }
 
-    @Override
-    public TransactionDto updateTransaction(TransactionDto transactionDto) {
-        return null;
+    public Boolean accountBalanceCheck(float accountBalance, float checkAmount){
+
+        return checkAmount <= accountBalance;
+
+    }
+    public float debitAccount(float accountBalance, float debitAmount){
+        return accountBalance - debitAmount;
     }
 
-    @Override
-    public List<TransactionDto> findAllTransactionsBYUserId(Long id) {
-        return null;
+    public float creditAccount(float accountBalance, float creditAmount){
+        return accountBalance + creditAmount;
+    }
+    public Boolean validateMobileTransaction(String mobileNumber, float amount){
+        return true;
     }
 
-    public Boolean setTransactionStatus(float cost){
+    public Boolean validateCardTransaction(String cardNumber,String cvv, String expDate, float amount){
         return true;
     }
 }

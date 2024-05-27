@@ -13,6 +13,12 @@ public class PurchaseLineMapper {
                 .setQuantity(purchaseLineDto.getQuantity())
                 .setItem(ItemMapper.itemDtoToItem(purchaseLineDto.getItemDto()));
     }
+
+    public static PurchaseLineDto purchaseLineToPurchaseLineDto(PurchaseLine purchaseLine){
+        return new PurchaseLineDto().setItemDto(ItemMapper.itemToItemDto(purchaseLine.getItem()))
+                .setQuantity(purchaseLine.getQuantity())
+                .setId(purchaseLine.getId());
+    }
     public static List<PurchaseLine> purchaseLineDtoToPurchaseLines(List<PurchaseLineDto> purchaseLineDtos){
 
         List<PurchaseLine> purchaseLines = new ArrayList<>();
