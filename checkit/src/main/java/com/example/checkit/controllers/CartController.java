@@ -1,12 +1,13 @@
 package com.example.checkit.controllers;
 
-import com.example.checkit.dto.CartDto;
-import com.example.checkit.dto.PurchaseLineDto;
-import com.example.checkit.handler.ResponseHandler;
-import com.example.checkit.service.serviceImplementation.CartServiceImp;
-import com.example.checkit.service.serviceImplementation.PurchaseLineServiceImp;
+import com.example.checkit.dtos.CartDto;
+import com.example.checkit.dtos.PurchaseLineDto;
+import com.example.checkit.handlers.ResponseHandler;
+import com.example.checkit.services.serviceImplementation.CartServiceImp;
+import com.example.checkit.services.serviceImplementation.PurchaseLineServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,7 +24,7 @@ public class CartController {
     }
 
     @PostMapping("/save/{clientId}/{itemId}")
-    public ResponseEntity<Object> createCart(@PathVariable Long clientId, @PathVariable Long itemId, @RequestBody PurchaseLineDto purchaseLineDto){
+    public ResponseEntity<Object> createCart(@PathVariable Long clientId, @PathVariable Long itemId, @Validated @RequestBody PurchaseLineDto purchaseLineDto){
         Long purchaseLineId = purchaseLineServiceImp.createPurchaseLine(itemId, purchaseLineDto);
         CartDto cartDto = cartServiceImp.createCard(clientId,purchaseLineId);
         return ResponseHandler.generateResponseData("Card created", HttpStatus.CREATED,cartDto);

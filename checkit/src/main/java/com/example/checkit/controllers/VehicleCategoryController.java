@@ -1,7 +1,8 @@
 package com.example.checkit.controllers;
 
-import com.example.checkit.dto.VehicleCategoryDto;
-import com.example.checkit.service.serviceImplementation.VehicleCategoryServiceImp;
+import com.example.checkit.dtos.VehicleCategoryDto;
+import com.example.checkit.services.serviceImplementation.VehicleCategoryServiceImp;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ public class VehicleCategoryController {
     }
 
     @PostMapping("/save")
-    public VehicleCategoryDto createVehicleCategory(@RequestBody VehicleCategoryDto vehicleCategoryDto){
+    public VehicleCategoryDto createVehicleCategory(@Validated @RequestBody VehicleCategoryDto vehicleCategoryDto){
         return vehicleCategoryServiceImp.createVehicleCategory(vehicleCategoryDto);
     }
 }

@@ -1,10 +1,11 @@
 package com.example.checkit.controllers;
 
-import com.example.checkit.dto.CategoryDto;
-import com.example.checkit.handler.ResponseHandler;
-import com.example.checkit.service.serviceImplementation.CategoryServiceImp;
+import com.example.checkit.dtos.CategoryDto;
+import com.example.checkit.handlers.ResponseHandler;
+import com.example.checkit.services.serviceImplementation.CategoryServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createCategory(@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<Object> createCategory(@Validated  @RequestBody CategoryDto categoryDto){
         CategoryDto categoryDtoEntity = categoryServiceImp.create(categoryDto);
         return ResponseHandler.generateResponseData("Category created successfully", HttpStatus.CREATED,categoryDtoEntity);
     }

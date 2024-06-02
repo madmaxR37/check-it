@@ -1,10 +1,11 @@
 package com.example.checkit.controllers;
 
-import com.example.checkit.dto.PreOrderDto;
-import com.example.checkit.handler.ResponseHandler;
-import com.example.checkit.service.serviceImplementation.PreOrderServiceImp;
+import com.example.checkit.dtos.PreOrderDto;
+import com.example.checkit.handlers.ResponseHandler;
+import com.example.checkit.services.serviceImplementation.PreOrderServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,7 @@ public class PreOrderController {
     }
 
     @PostMapping("/save/{cartId}")
-    public ResponseEntity<Object> createPreOrder(@RequestBody PreOrderDto preOrderDto, @PathVariable Long cartId){
+    public ResponseEntity<Object> createPreOrder(@Validated  @RequestBody PreOrderDto preOrderDto, @PathVariable Long cartId){
          PreOrderDto  preOrder = preOrderServiceImp.createPreOrder(preOrderDto,cartId);
         return ResponseHandler.generateResponseData("PreOder Created!", HttpStatus.CREATED,preOrder);
     }
