@@ -15,7 +15,6 @@ public class SellerMapper {
                 .setActiveStatus(sellerDto.getActiveStatus())
                 .setAccountBalance(sellerDto.getAccountBalance())
                 .setRole(sellerDto.getRole())
-                .setProfileUrl(sellerDto.getProfileUrl())
                 .setAddress(AddressMapper.addressDtoToAddress(sellerDto.getAddressDto()));
     }
 

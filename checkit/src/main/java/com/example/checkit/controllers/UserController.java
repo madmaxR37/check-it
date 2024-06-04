@@ -8,10 +8,8 @@ import com.example.checkit.services.serviceImplementation.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("check-it/v1/users/auth")
@@ -38,5 +36,12 @@ public class UserController {
     public ResponseEntity<Object> createDeliveryMan(@Validated @RequestBody DeliveryManDto deliveryManDto){
         userService.createUser(deliveryManDto);
         return ResponseHandler.generateResponse("DeliveryMan created successfully", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/profile/{userId}")
+    public ResponseEntity<Object> setProfile(@PathVariable Long userId, @RequestParam("file") MultipartFile file){
+        String message = userService.setProfile(userId, file);
+
+        return ResponseHandler.generateResponse(message, HttpStatus.OK);
     }
 }
