@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,8 +22,11 @@ public class ItemController {
     }
 
     @PostMapping("/create/{sellerId}/{categoryIds}")
-    public ResponseEntity<Object> createItem(@Validated  @RequestBody ItemDto itemDto, @PathVariable Long sellerId, @PathVariable List<Long> categoryIds){
-        ItemDto itemDtoEntity = itemServiceImp.createItem(itemDto,sellerId,categoryIds);
+    public ResponseEntity<Object> createItem(@Validated  @RequestPart("data") ItemDto itemDto,
+                                             @PathVariable Long sellerId,
+                                             @PathVariable List<Long> categoryIds,
+                                              @RequestPart("files") List<MultipartFile> files){
+        ItemDto itemDtoEntity = itemServiceImp.createItem(itemDto,sellerId,categoryIds, files);
          return ResponseHandler.generateResponseData("Item created successfully", HttpStatus.CREATED,itemDtoEntity);
     }
 }

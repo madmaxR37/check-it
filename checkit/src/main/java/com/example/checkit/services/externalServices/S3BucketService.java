@@ -1,4 +1,4 @@
-package com.example.checkit.services.aws;
+package com.example.checkit.services.externalServices;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -41,6 +43,16 @@ public class S3BucketService {
         }
 
         return getImageUrl(fileName);
+    }
+
+
+    public List<String> uploadFiles(List<MultipartFile> files){
+        List<String> imageUrls = new ArrayList<>();
+        for(MultipartFile file: files){
+            String imageUrl = uploadFile(file);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
     }
 
     private String getImageUrl(String fileName) {

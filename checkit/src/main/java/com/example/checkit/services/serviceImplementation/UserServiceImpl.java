@@ -4,18 +4,23 @@ import com.example.checkit.dtos.ClientDto;
 import com.example.checkit.dtos.mappers.UserMapper;
 import com.example.checkit.exceptions.EntityAlreadyExistException;
 import com.example.checkit.exceptions.EntityNotFoundException;
+import com.example.checkit.models.DeliveryMan;
+import com.example.checkit.models.Seller;
 import com.example.checkit.models.User;
 import com.example.checkit.repositories.UserRepository;
 import com.example.checkit.services.UserService;
-import com.example.checkit.services.aws.S3BucketService;
+import com.example.checkit.services.externalServices.S3BucketService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -49,15 +54,51 @@ public class UserServiceImpl implements UserService {
          if (user.isEmpty()){
              throw new EntityNotFoundException("user not found", HttpStatus.NOT_FOUND);
          }
-         String imageurl = bucketService.uploadFile(file);
-         if (imageurl.isEmpty()){
+         String imageUrl = bucketService.uploadFile(file);
+         if (imageUrl.isEmpty()){
              System.out.println("an error occured during");
              return "an error occured";
          }
          User userModel =user.get();
-         userModel.setProfileUrl(imageurl);
+         userModel.setProfileUrl(imageUrl);
          userRepository.save(userModel);
         return "image store successfully";
 
+    }
+
+    @Override
+    public String setNIC(Long userId, List<MultipartFile> multipartFiles) {
+        Optional<User> userOptional =  userRepository.findById(userId);
+        if (userOptional.isEmpty()){
+            throw new EntityNotFoundException("user not found", HttpStatus.NOT_FOUND);
+        }
+       List <String> urls = bucketService.uploadFiles(multipartFiles);
+        User user = userOptional.get();
+         if (user instanceof Seller seller){
+             seller.setNationalId(urls);
+             userRepository.save(seller);
+         } else if (user instanceof DeliveryMan deliveryMan) {
+              deliveryMan.setNicImagesUrls(urls);
+              userRepository.save(deliveryMan);
+         }
+
+        return "images store successfully";
+    }
+
+    @Override
+    public String setDrivingLicence(Long userId, List<MultipartFile> multipartFiles) {
+        Optional<User> userOptional =  userRepository.findById(userId);
+        if (userOptional.isEmpty()){
+            throw new EntityNotFoundException("user not found", HttpStatus.NOT_FOUND);
+        }
+
+        List<String> urls = bucketService.uploadFiles(multipartFiles);
+
+        User user = userOptional.get();
+
+        DeliveryMan deliveryMan = (DeliveryMan) user;
+        deliveryMan.setDrivingLicenseUrls(urls);
+        userRepository.save(deliveryMan);
+        return "images store successfully";
     }
 }

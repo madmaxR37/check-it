@@ -11,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("check-it/v1/users/auth")
 public class UserController {
@@ -42,6 +44,18 @@ public class UserController {
     public ResponseEntity<Object> setProfile(@PathVariable Long userId, @RequestParam("file") MultipartFile file){
         String message = userService.setProfile(userId, file);
 
+        return ResponseHandler.generateResponse(message, HttpStatus.OK);
+    }
+
+    @PostMapping("/nic/{userId}")
+    public ResponseEntity<Object> setNic(@PathVariable Long userId,  @RequestParam("files") List<MultipartFile> files){
+        String message = userService.setNIC(userId,files);
+        return ResponseHandler.generateResponse(message, HttpStatus.OK);
+    }
+
+    @PostMapping("/licences/{userId}")
+    public ResponseEntity<Object> setLicence(@PathVariable Long userId, @RequestParam("files") List<MultipartFile> files){
+        String message = userService.setDrivingLicence(userId,files);
         return ResponseHandler.generateResponse(message, HttpStatus.OK);
     }
 }

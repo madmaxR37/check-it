@@ -22,6 +22,8 @@ public class OrderEntity {
     @Column(name = "order_status")
     private Boolean status;
 
+    private String qrCode;
+
     @Column(name = "created_date")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

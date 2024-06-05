@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +27,6 @@ public class ItemDto {
     @NotBlank(message = "item must have a description")
     private String itemDescription;
 
-    @NotEmpty(message = "you must add at least an image")
     private List<String> itemImages;
 
     private Boolean availableStatus;
@@ -34,6 +34,4 @@ public class ItemDto {
     private SellerDto sellerDto;
 
     private List<CategoryDto> categories;
-
-
 }

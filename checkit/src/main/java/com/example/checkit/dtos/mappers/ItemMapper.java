@@ -45,8 +45,7 @@ public class ItemMapper {
         return new Item()
                 .setItemName(itemDto.getItemName())
                 .setItemDescription(itemDto.getItemDescription())
-                .setUnitPrice(itemDto.getUnitPrice())
-                .setItemImages(itemDto.getItemImages());
+                .setUnitPrice(itemDto.getUnitPrice());
     }
     public static ItemDto itemToItemDto(Item item){
         return new ItemDto()
