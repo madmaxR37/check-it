@@ -5,13 +5,16 @@ import com.example.checkit.dtos.AddressDto;
 import com.example.checkit.dtos.mappers.AddressMapper;
 import com.example.checkit.dtos.mappers.PreOrderMapper;
 import com.example.checkit.exceptions.EntityNotFoundException;
+import com.example.checkit.models.Address;
 import com.example.checkit.models.Cart;
 import com.example.checkit.models.PreOrder;
 import com.example.checkit.repositories.CartRepository;
 import com.example.checkit.repositories.PreOrderRepository;
 import com.example.checkit.services.PreOrderService;
+import com.example.checkit.services.externalServices.GraphHopperService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +22,19 @@ import java.util.Optional;
 @Service
 public class PreOrderServiceImp  implements PreOrderService {
 
+    private static final double FUEL_CONSUMPTION_RATE = 0.005;
+
+    private static final double FUEL_PRICE = 700.0;
+
+    private static final double BASE_DELIVERY_CHARGE = 500.0;
     private final PreOrderRepository preOrderRepository;
 
+    private final GraphHopperService graphHopperService;
     private final CartRepository cartRepository;
 
-    public PreOrderServiceImp(PreOrderRepository preOrderRepository, CartRepository cartRepository) {
+    public PreOrderServiceImp(PreOrderRepository preOrderRepository, GraphHopperService graphHopperService, CartRepository cartRepository) {
         this.preOrderRepository = preOrderRepository;
+        this.graphHopperService = graphHopperService;
         this.cartRepository = cartRepository;
     }
 
@@ -34,12 +44,11 @@ public class PreOrderServiceImp  implements PreOrderService {
         if (cartOptional.isPresent()) {
             Cart cart = cartOptional.get();
             PreOrder preOrder = PreOrderMapper.preOrderDtoToPreOrder(preOrderDto);
-                    preOrder.setCart(cart)
-                            .setTripDistance(calculateTripeDistance(preOrderDto.getClientAddressDto(),
-                                    AddressMapper.addressToAddressDto(cart.getPurchaseLine().get(0).getItem().getSeller().getAddress())))
-                            .setDeliveryCost(calculateDeliveryCost(preOrder.getTripDistance()))
-                            .setTotalCost(calculateTotalExpense(preOrder.getDeliveryCost(),cart.getTotalItemsCost())); //TODO implement Async feature
-
+                preOrder.setCart(cart)
+                        .setTripDistance(calculateTripeDistance(preOrderDto.getClientAddressDto(),
+                                cart.getPurchaseLine().get(0).getItem().getSeller().getAddress()))
+                        .setDeliveryCost(calculateDeliveryCost(preOrder.getTripDistance()))
+                        .setTotalCost(calculateTotalExpense(preOrder.getDeliveryCost(),cart.getTotalItemsCost()));
             return PreOrderMapper.preOrderToPreOrder(preOrderRepository.save(preOrder));
         }
         throw new EntityNotFoundException("this cart doesn't exist", HttpStatus.NOT_FOUND);
@@ -65,18 +74,19 @@ public class PreOrderServiceImp  implements PreOrderService {
 
     }
 
-    public float calculateTripeDistance(AddressDto clientAddressDto, AddressDto sellerAddressDto){
-        //TODO Google API
-        return  2000;
+    public Float calculateTripeDistance(AddressDto clientAddressDto, Address sellerAddress){
+
+
+        return graphHopperService.distance(AddressMapper.addressDtoToAddress(clientAddressDto),sellerAddress);
     }
 
     public float calculateDeliveryCost(float tripeDistance){
-        //TODO
-        return 1000;
-    }
+        double fuelCost = tripeDistance/1000 * FUEL_CONSUMPTION_RATE * FUEL_PRICE;
+        double deliveryPrice = fuelCost + BASE_DELIVERY_CHARGE;
+        return (float) deliveryPrice;
 
+    }
     public float calculateTotalExpense(float delivery, float item_cost){
-        //TODO
         return delivery+item_cost;
     }
 }

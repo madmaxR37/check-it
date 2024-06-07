@@ -1,8 +1,11 @@
 package com.example.checkit.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.math.BigDecimal;
 
 @Embeddable
 @Data
@@ -11,7 +14,9 @@ public class Address {
 
     protected String addressName;
 
-    protected  Long addressLongitude;
+    @Column(precision = 24, scale = 17, nullable = false)
+    protected BigDecimal addressLongitude;
 
-    protected Long addressLatitude;
+    @Column(precision = 24, scale = 17, nullable = false)
+    protected BigDecimal addressLatitude;
 }

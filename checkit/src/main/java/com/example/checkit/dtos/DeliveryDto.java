@@ -28,7 +28,6 @@ public class DeliveryDto {
     private Boolean assignationStatus;
 
     @NotBlank(message = "delivery must have a description")
-    @Max(value = 500,message = "delivery description shouldn't be more than 500 words")
     private String description;
 
     @NotBlank(message = "delivery must have a seller number")
