@@ -28,13 +28,13 @@ public class TransactionController {
     }
     @PostMapping("/mobile/{preOrderId}")
     public ResponseEntity<Object> mobileTransaction(@Validated @RequestBody MobileDto mobileDto, @PathVariable Long preOrderId){
-        Object transaction = transactionServiceImp.preOrderTransaction(mobileDto, preOrderId);
+        Object transaction = transactionServiceImp.preOrderMobileTransaction(mobileDto, preOrderId);
         return ResponseHandler.generateResponseData("Transaction successful", HttpStatus.CREATED,transaction);
     }
 
     @PostMapping("/credit-card/{preOrderId}")
     public ResponseEntity<Object> cardTransaction(@Validated @RequestBody CreditCardDto creditCardDto, @PathVariable Long preOrderId){
-        Object transaction = transactionServiceImp.preOrderTransaction(creditCardDto, preOrderId);
+        Object transaction = transactionServiceImp.preOrderCreditCardTransaction(creditCardDto, preOrderId);
         return ResponseHandler.generateResponseData("Transaction successful", HttpStatus.CREATED,transaction);
     }
 }

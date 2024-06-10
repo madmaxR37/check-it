@@ -12,6 +12,7 @@ import com.example.checkit.repositories.CartRepository;
 import com.example.checkit.repositories.PreOrderRepository;
 import com.example.checkit.services.PreOrderService;
 import com.example.checkit.services.externalServices.GraphHopperService;
+import com.example.checkit.utils.DeliveryConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +23,6 @@ import java.util.Optional;
 @Service
 public class PreOrderServiceImp  implements PreOrderService {
 
-    private static final double FUEL_CONSUMPTION_RATE = 0.005;
-
-    private static final double FUEL_PRICE = 700.0;
-
-    private static final double BASE_DELIVERY_CHARGE = 500.0;
     private final PreOrderRepository preOrderRepository;
 
     private final GraphHopperService graphHopperService;
@@ -75,14 +71,12 @@ public class PreOrderServiceImp  implements PreOrderService {
     }
 
     public Float calculateTripeDistance(AddressDto clientAddressDto, Address sellerAddress){
-
-
         return graphHopperService.distance(AddressMapper.addressDtoToAddress(clientAddressDto),sellerAddress);
     }
 
     public float calculateDeliveryCost(float tripeDistance){
-        double fuelCost = tripeDistance/1000 * FUEL_CONSUMPTION_RATE * FUEL_PRICE;
-        double deliveryPrice = fuelCost + BASE_DELIVERY_CHARGE;
+        double fuelCost = tripeDistance/1000 * DeliveryConstants.FUEL_CONSUMPTION_RATE * DeliveryConstants.FUEL_PRICE;
+        double deliveryPrice = fuelCost + DeliveryConstants.BASE_DELIVERY_CHARGE;
         return (float) deliveryPrice;
 
     }

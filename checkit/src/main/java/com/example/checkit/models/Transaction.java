@@ -38,5 +38,12 @@ public class Transaction {
     @JoinColumn(name = "preorder_id")
     protected PreOrder preOrder;
 
+    @OneToOne
+    @JoinColumn(name = "senderid")
+    protected User sender;
+
+    @OneToOne
+    @JoinColumn(name = "receiverid")
+    protected User receiver;
 
 }

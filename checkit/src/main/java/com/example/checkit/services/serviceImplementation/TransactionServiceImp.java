@@ -3,6 +3,8 @@ package com.example.checkit.services.serviceImplementation;
 import com.example.checkit.dtos.CreditCardDto;
 import com.example.checkit.dtos.MobileDto;
 import com.example.checkit.dtos.TransactionDto;
+import com.example.checkit.dtos.mappers.CreditCardMapper;
+import com.example.checkit.dtos.mappers.MobileMapper;
 import com.example.checkit.dtos.mappers.TransactionMapper;
 import com.example.checkit.exceptions.EntityNotFoundException;
 import com.example.checkit.exceptions.TransactionFailedException;
@@ -41,25 +43,26 @@ public class TransactionServiceImp implements TransactionService {
 
 
     @Override
-    public Object preOrderTransaction(Object transactionDto, Long preOrderId) {
+    public TransactionDto preOrderTransaction(TransactionDto transactionDto, Long preOrderId) {
 
         Optional<PreOrder> preOrder = preOrderRepository.findById(preOrderId);
         if (preOrder.isPresent()){
-
             Optional<User> clientOptional = userRepository.findById(preOrder.get().getCart().getClient().getId());
             Optional<User> sellerOptional = userRepository.findById(preOrder.get().getCart().getPurchaseLine().get(0).getItem().getSeller().getId());
             if (sellerOptional.isPresent()){
            if (clientOptional.isPresent()){
                User seller = sellerOptional.get();
                User client = clientOptional.get();
-            if (transactionDto instanceof TransactionDto){
+
                 Transaction transaction = new Transaction()
                         .setPreOrder(preOrder.get())
                         .setAmount(preOrder.get().getTotalCost());
                  if (accountBalanceCheck(client.getAccountBalance(),preOrder.get().getTotalCost())){
                     client.setAccountBalance(debitAccount(client.getAccountBalance(),preOrder.get().getTotalCost()));
                     seller.setAccountBalance(creditAccount(seller.getAccountBalance(),preOrder.get().getTotalCost()));
-                    transaction.setStatus(true);
+                    transaction.setStatus(true)
+                            .setSender(client)
+                            .setReceiver(seller);
                   userRepository.save(seller);
                   userRepository.save(client);
                      OrderEntity orderEntity = new OrderEntity()
@@ -69,47 +72,7 @@ public class TransactionServiceImp implements TransactionService {
                      transaction.setOrderEntity(orderEntity);
                  return TransactionMapper.transactionToTransactionDto(transactionRepository.save(transaction));
                  }
-               // throw new  TransactionFailedException("insufficient account balance", HttpStatus.BAD_REQUEST);
-
-            }
-
-            if (transactionDto instanceof MobileDto){
-                Mobile transaction = (Mobile) new Mobile()
-                        .setPreOrder(preOrder.get())
-                        .setAmount(preOrder.get().getTotalCost());
-                if (validateMobileTransaction(((MobileDto) transactionDto).getNumber(),
-                        preOrder.get().getTotalCost())){
-                    seller.setAccountBalance(creditAccount(seller.getAccountBalance(),
-                            preOrder.get().getTotalCost()));
-                    transaction.setStatus(true);
-                    userRepository.save(seller);
-                    OrderEntity orderEntity = new OrderEntity()
-                            .setPreOrder(preOrder.get());
-                    orderRepository.save(orderEntity);
-                    return TransactionMapper.transactionToTransactionDto(transactionRepository.save(transaction));
-                }
-
-
-            }
-            if (transactionDto instanceof CreditCardDto){
-                CreditCard transaction = (CreditCard) new CreditCard()
-                        .setPreOrder(preOrder.get())
-                        .setAmount(preOrder.get().getTotalCost());
-                if (validateCardTransaction(((CreditCardDto) transactionDto).getCreditCartNumber(),
-                        ((CreditCardDto) transactionDto).getCvv(),
-                        ((CreditCardDto) transactionDto).getExpDate(),
-                        preOrder.get().getTotalCost())){
-                    seller.setAccountBalance(creditAccount(seller.getAccountBalance(),
-                            (transaction).getAmount()));
-                    transaction.setStatus(true);
-                    userRepository.save(seller);
-                    OrderEntity orderEntity = new OrderEntity()
-                            .setPreOrder(preOrder.get());
-                    orderRepository.save(orderEntity);
-                    return TransactionMapper.transactionToTransactionDto(transactionRepository.save(transaction));
-                }
-
-            }
+               throw new  TransactionFailedException("insufficient account balance", HttpStatus.BAD_REQUEST);
            }
                 throw new EntityNotFoundException("this client doesn't exist", HttpStatus.NOT_FOUND);
 
@@ -120,6 +83,72 @@ public class TransactionServiceImp implements TransactionService {
         }
 
         throw new EntityNotFoundException("this preorder doesn't exist", HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public MobileDto preOrderMobileTransaction(MobileDto mobileDto, Long preOrderId) {
+        Optional<PreOrder> preOrder = preOrderRepository.findById(preOrderId);
+        if (preOrder.isPresent()){
+            Optional<User> clientOptional = userRepository.findById(preOrder.get().getCart().getClient().getId());
+            Optional<User> sellerOptional = userRepository.findById(preOrder.get().getCart().getPurchaseLine().get(0).getItem().getSeller().getId());
+            if (sellerOptional.isPresent()){
+                if (clientOptional.isPresent()) {
+                    User seller = sellerOptional.get();
+
+                    Mobile mobileTransaction = (Mobile) new Mobile()
+                            .setPreOrder(preOrder.get())
+                            .setAmount(preOrder.get().getTotalCost());
+                    if (validateMobileTransaction(mobileDto.getNumber(),preOrder.get().getTotalCost())){
+                        seller.setAccountBalance(creditAccount(seller.getAccountBalance(),
+                            mobileTransaction.getAmount()));
+                        mobileTransaction.setStatus(true)
+                                .setReceiver(seller);
+                        userRepository.save(seller);
+                    OrderEntity orderEntity = new OrderEntity()
+                            .setPreOrder(preOrder.get());
+                    orderRepository.save(orderEntity);
+                    return MobileMapper.mobileToMobileDto(transactionRepository.save(mobileTransaction));
+                    }
+
+                    }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public CreditCardDto preOrderCreditCardTransaction(CreditCardDto creditCardDto, Long preOrderId) {
+
+        Optional<PreOrder> preOrder = preOrderRepository.findById(preOrderId);
+        if (preOrder.isPresent()){
+            Optional<User> clientOptional = userRepository.findById(preOrder.get().getCart().getClient().getId());
+            Optional<User> sellerOptional = userRepository.findById(preOrder.get().getCart().getPurchaseLine().get(0).getItem().getSeller().getId());
+            if (sellerOptional.isPresent()){
+                if (clientOptional.isPresent()) {
+                    User seller = sellerOptional.get();
+                    CreditCard transaction = (CreditCard) new CreditCard()
+                            .setPreOrder(preOrder.get())
+                            .setAmount(preOrder.get().getTotalCost());
+                    if (validateCardTransaction(creditCardDto.getCreditCartNumber(),
+                            creditCardDto.getCvv(),
+                            creditCardDto.getExpDate(),
+                            preOrder.get().getTotalCost())){
+                        seller.setAccountBalance(creditAccount(seller.getAccountBalance(),
+                                (transaction).getAmount()));
+                        transaction.setStatus(true)
+                                .setReceiver(seller);
+                        userRepository.save(seller);
+                        OrderEntity orderEntity = new OrderEntity()
+                                .setPreOrder(preOrder.get());
+                        orderRepository.save(orderEntity);
+                        CreditCardMapper.creditCartToCreditCartDto(transactionRepository.save(transaction));
+
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     public Boolean accountBalanceCheck(float accountBalance, float checkAmount){
