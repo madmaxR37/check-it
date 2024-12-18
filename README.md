@@ -20,6 +20,8 @@ The CheckIt application is a marketplace platform developed as part of my Bachel
 - **MySQL**: Database management system
 - **Maven**: Build automation tool
 - **Postman**: API testing tool
+- **aws**: s3bucket
+- **geocode**: API
 
 ## Getting Started
 
