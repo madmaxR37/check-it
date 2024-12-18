@@ -8,7 +8,11 @@ The CheckIt application is a marketplace platform developed as part of my Bachel
 - Product listing and management
 - Shopping cart functionality
 - Order processing and history
+- route mapping
+- geolocalisation
+- transportation cost calculation according to distance
 - RESTful APIs for frontend integration
+- more...
 
 ## Technologies Used
 - **Java**: Programming language
